@@ -4,38 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda de Camisetas</title>
-  <!-- Enlace a tu archivo CSS -->
   <link rel="stylesheet" href="grid.css">
-
-  <!-- Estilos CSS adicionales si es necesario -->
   <style>
     .product img {
       max-width: 100%;
       height: auto;
     }
-
-    /* Agrega estilos personalizados aquí */
   </style>
-
-  <!-- Favicon (icono de pestaña del navegador) -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-  <!-- Metadatos adicionales si es necesario -->
   <meta name="description" content="Tu descripción aquí">
   <meta name="keywords" content="palabras clave, separadas, por, comas">
-
-  <!-- Enlaces a fuentes web si es necesario -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 </head>
-
 <body class="grid-container">
   <header class="header">HEADER</header>
   <nav class="navbar">NAVBAR</nav>
-  <article class="main">
+  <article class="main" id="app">
     <h1>Tienda de Camisetas</h1>
     <div class="filter">
       <label for="category">Categoría:</label>
-      <select id="category">
+      <select v-model="selectedCategory">
         <option value="todos">Todos</option>
         <option value="manga-corta">Manga Corta</option>
         <option value="manga-larga">Manga Larga</option>
@@ -43,7 +31,7 @@
     </div>
     <div class="filter">
       <label for="price">Precio:</label>
-      <select id="price">
+      <select v-model="selectedPrice">
         <option value="todos">Todos</option>
         <option value="menos-de-20">$0 - $19.99</option>
         <option value="20-50">$20 - $49.99</option>
@@ -52,71 +40,57 @@
     </div>
     <div class="product-list">
       <!-- Aquí se mostrarán las camisetas filtradas -->
+      <div class="product" v-for="camiseta in filteredCamisetas" :key="camiseta.nombre">
+        <h3>{{ camiseta.nombre }}</h3>
+        <p>Categoría: {{ camiseta.categoria }}</p>
+        <p>Precio: ${{ camiseta.precio.toFixed(2) }}</p>
+        <img :src="camiseta.imagen" :alt="camiseta.nombre || 'Sin imagen'" />
+      </div>
+      <p v-if="filteredCamisetas.length === 0">No se encontraron camisetas que coincidan con los filtros seleccionados.</p>
     </div>
   </article>
   <aside class="sidebar">
     <!-- Contenido de la barra lateral aquí -->
+    <h2>Aside</h2>
   </aside>
   <footer class="footer">FOOTER</footer>
-   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const categorySelect = document.getElementById("category");
-      const priceSelect = document.getElementById("price");
-      const productList = document.querySelector(".product-list");
-
-      // Array de ejemplos de camisetas con imágenes
-      const camisetas = [
-        { nombre: "Camiseta Manga Corta 1", categoria: "manga-corta", precio: 15.99, imagen: "./img/photo_1.jpg" },
-        { nombre: "Camiseta Manga Corta 2", categoria: "manga-corta", precio: 22.99, imagen: "./img/photo_10.jpg" },
-        { nombre: "Camiseta Manga Larga 1", categoria: "manga-larga", precio: 29.99, imagen: "./img/photo_11.jpg" },
-        { nombre: "Camiseta Manga Larga 2", categoria: "manga-larga", precio: 45.99, imagen: "./img/" },
-      ];
-
-      // Función para mostrar las camisetas filtradas
-      function mostrarCamisetas() {
-        const categoriaSeleccionada = categorySelect.value;
-        const precioSeleccionado = priceSelect.value;
-
-        const camisetasFiltradas = camisetas.filter((camiseta) => {
-          if (categoriaSeleccionada === "todos" || camiseta.categoria === categoriaSeleccionada) {
-            if (precioSeleccionado === "todos") {
-              return true;
-            } else if (precioSeleccionado === "menos-de-20" && camiseta.precio < 20) {
-              return true;
-            } else if (precioSeleccionado === "20-50" && camiseta.precio >= 20 && camiseta.precio <= 50) {
-              return true;
-            } else if (precioSeleccionado === "50-o-mas" && camiseta.precio > 50) {
-              return true;
+  <!-- CDN de Vue 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.6"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          selectedCategory: 'todos',
+          selectedPrice: 'todos',
+          camisetas: [
+            { nombre: "Camiseta Manga Corta 1", categoria: "manga-corta", precio: 15.99, imagen: "./img/photo_1.jpg" },
+            { nombre: "Camiseta Manga Corta 2", categoria: "manga-corta", precio: 22.99, imagen: "./img/photo_10.jpg" },
+            { nombre: "Camiseta Manga Larga 1", categoria: "manga-larga", precio: 29.99, imagen: "./img/photo_11.jpg" },
+            { nombre: "Camiseta Manga Larga 2", categoria: "manga-larga", precio: 45.99, imagen: "./img/" },
+          ],
+        };
+      },
+      computed: {
+        filteredCamisetas() {
+          return this.camisetas.filter(camiseta => {
+            if (this.selectedCategory === 'todos' || camiseta.categoria === this.selectedCategory) {
+              if (this.selectedPrice === 'todos') {
+                return true;
+              } else if (this.selectedPrice === 'menos-de-20' && camiseta.precio < 20) {
+                return true;
+              } else if (this.selectedPrice === '20-50' && camiseta.precio >= 20 && camiseta.precio <= 50) {
+                return true;
+              } else if (this.selectedPrice === '50-o-mas' && camiseta.precio > 50) {
+                return true;
+              }
             }
-          }
-          return false;
-        });
-
-        productList.innerHTML = "";
-
-        if (camisetasFiltradas.length === 0) {
-          productList.innerHTML = "<p>No se encontraron camisetas que coincidan con los filtros seleccionados.</p>";
-        } else {
-          camisetasFiltradas.forEach((camiseta) => {
-            const producto = document.createElement("div");
-            producto.classList.add("product");
-            producto.innerHTML = `
-              <h3>${camiseta.nombre}</h3>
-              <p>Categoría: ${camiseta.categoria}</p>
-              <p>Precio: $${camiseta.precio.toFixed(2)}</p>
-              <img src="${camiseta.imagen}" alt="${camiseta.nombre || 'Sin imagen'}" />
-            `;
-            productList.appendChild(producto);
+            return false;
           });
-        }
-      }
-
-      categorySelect.addEventListener("change", mostrarCamisetas);
-      priceSelect.addEventListener("change", mostrarCamisetas);
-
-      // Mostrar todas las camisetas al cargar la página
-      mostrarCamisetas();
+        },
+      },
     });
+
+    app.mount('#app');
   </script>
 </body>
 </html>
