@@ -1,0 +1,58 @@
+body{
+	margin:0;
+	font-family: 'Montserrat', sans-serif;
+}
+img{
+	width:100%;
+	vertical-align:top;
+}
+#corazon{
+	width:29px;
+	padding-top:5px;
+}
+main{
+	text-align:center;
+	width:825px;
+	margin:auto;
+}
+.camiseta{
+	cursor:pointer;
+	position:relative;	
+	display:inline-block;
+}
+.contenido{
+	position:absolute;
+	margin:auto;
+	top:150px;
+	left:0px;
+	right:0;
+	width:44%;
+}
+.texto{	 
+    text-align:center;
+    font-size:2em;
+    color:white;
+    margin-bottom:15px;
+    outline:none;
+}
+#imprimir{
+	display:block;
+	margin:auto;
+	padding:7px 20px;
+	font-size:1.5em;
+	background-color:#F44336;
+	border-radius:25px;
+	outline:none;
+	border:4px solid white;
+	cursor:pointer;
+	position:absolute;
+	color:white;
+	left:0;
+	right:0;
+	top:690px;
+}
+#imprimir:hover{
+	color:orangered;
+	background-color:white;
+	border:4px solid orangered;
+}
