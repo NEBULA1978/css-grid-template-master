@@ -7,7 +7,7 @@ const app = Vue.createApp({
         { nombre: "Camiseta Manga Corta 1", categoria: "manga-corta", precio: 15.99, imagen: "./img/photo_1.jpg" },
         { nombre: "Camiseta Manga Corta 2", categoria: "manga-corta", precio: 22.99, imagen: "./img/photo_10.jpg" },
         { nombre: "Camiseta Manga Larga 1", categoria: "manga-larga", precio: 29.99, imagen: "./img/photo_11.jpg" },
-        { nombre: "Camiseta Manga Larga 2", categoria: "manga-larga", precio: 45.99, imagen: "./img/" },
+        { nombre: "Camiseta Manga Larga 2", categoria: "manga-larga", precio: 45.99, imagen: "./img/photo_15.jpg" },
       ],
     };
   },
